@@ -81,15 +81,16 @@
                 android:drawablePadding="12dp"
                 android:inputType="text|textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/addTransactionBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add transaction"
+            android:layout_height="66dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:backgroundTint="#E13333"
             android:padding="12dp"
-            android:backgroundTint="#FF4343"
-            android:textColor="@android:color/white"/>
+            android:text="Add transaction"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
