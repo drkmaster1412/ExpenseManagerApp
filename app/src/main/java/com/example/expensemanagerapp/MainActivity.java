@@ -2,51 +2,62 @@ package com.example.expensemanagerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Transaction> transactions;
+    private List<Transaction> transactions;
     private TransactionAdapter transactionAdapter;
     private LinearLayoutManager linearLayoutManager;
+
+    private AppDatabase db;
+
+    private FloatingActionButton addBtn;
 //    private TextView balance;
 //    private TextView budget;
 //    private TextView expense;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        transactions = new ArrayList<>();
-        transactions.add(
-                new Transaction("WeeklyBudget", 400)
-        );
-        transactions.add(
-                new Transaction("Lunch", -50)
-        );
+        db = Room.databaseBuilder(this,
+                AppDatabase.class,
+                "transactions").build();
 
         transactionAdapter = new TransactionAdapter(transactions);
         linearLayoutManager = new LinearLayoutManager(this);
 
-//        db = Room.databaseBuilder(this, AppDatabase.class, "transactions").build();
+
+        fetchAll();
+
+        addBtn = findViewById(R.id.addBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview); // Assuming R.id.recyclerview is the ID of your RecyclerView in XML.
         recyclerView.setAdapter(transactionAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        updateDashboard();
+
     }
 
     private void updateDashboard() {
@@ -71,5 +82,24 @@ public class MainActivity extends AppCompatActivity {
         budget.setText(String.format("$ %.2f", budgetAmount));
         expense.setText(String.format("$ %.2f", expenseAmount));
     }
+
+    private void fetchAll() {
+        new Thread(() -> {
+            transactions = db.transactionDao().getAll();
+
+            runOnUiThread(() -> {
+                updateDashboard();
+                transactionAdapter.setData(transactions);
+            });
+        }).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchAll();
+    }
+
+
 
 }

@@ -1,21 +1,56 @@
 package com.example.expensemanagerapp;
 
-public final class Transaction {
-    private final String label;
-    private final double amount;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import java.io.Serializable;
 
-    public final String getLabel() {
-        return this.label;
-    }
+@Entity(tableName = "transactions")
+public class Transaction implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    public final double getAmount() {
-        return this.amount;
-    }
+    private String label;
+    private double amount;
+    private String description;
 
-    public Transaction(String label, double amount) {
-        super();
+    public Transaction(int id, String label, double amount, String description) {
+        this.id = id;
         this.label = label;
+        this.amount = amount;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

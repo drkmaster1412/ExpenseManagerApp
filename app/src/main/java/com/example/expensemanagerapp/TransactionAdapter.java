@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder>
@@ -17,7 +18,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private List<Transaction> transactions;
 
     public TransactionAdapter(List<Transaction> transactions) {
-        this.transactions = transactions;
+        if (transactions != null) {
+            this.transactions = transactions;
+        } else {
+            this.transactions = new ArrayList<>(); // Initialize with an empty list
+        }
     }
 
     public class TransactionHolder extends RecyclerView.ViewHolder {
@@ -51,7 +56,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
 
         holder.label.setText(transaction.getLabel());
-
+//
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
